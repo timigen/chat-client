@@ -1,4 +1,4 @@
-import { EventTypes } from "chat-models";
+import { EventTypes, Message } from "chat-models";
 
 (() => {
   "use strict";
@@ -58,6 +58,7 @@ import { EventTypes } from "chat-models";
   let connection = new WebSocket("ws://" + wsAddress);
   connection.onopen = () => {
     status.style.backgroundColor = "green";
+    // status.style.padding = "5px";
     status.innerText = "connected to " + wsAddress;
 
     input.disabled = false;
@@ -67,7 +68,6 @@ import { EventTypes } from "chat-models";
   connection.onerror = error => {
     // there were some problems with connection...
     content.innerHTML = `<p>problem with your connection or the server is down.</p>`;
-
     status.style.backgroundColor = "red";
     status.innerText = "connection error!";
   };
@@ -89,14 +89,14 @@ import { EventTypes } from "chat-models";
       for (let i = 0; i < json.room.events.length; i++) {
         let target = json.room.events[i];
         // target.rendered = new Date().toISOString();
-        addMessage(target.data.author, target.data.text);
+        addMessage(target.data);
       }
     } else if (json.type === EventTypes.Message) {
       // it's a single message
       // let the user write another message
       input.disabled = false;
       let current = json.data;
-      addMessage(current.author, current.text);
+      addMessage(current);
     } else {
       console.log("UNKNOWN TYPE", json);
     }
@@ -130,14 +130,10 @@ import { EventTypes } from "chat-models";
   /**
    * Add message to the chat window
    */
-  function addMessage(author, message) {
+  function addMessage(message: Message) {
     content.innerHTML =
       content.innerHTML +
-      "<p><span>" +
-      author +
-      "</span> : " +
-      message +
-      "</p>";
+      `<p><span>${message.author}</span>:<span>${message.text}</span></p>`;
 
     scrollToBottom("content");
   }
