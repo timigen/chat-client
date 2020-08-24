@@ -1,0 +1,40 @@
+{
+  "name": "chat-client",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "format": "prettier --write ./src/**/*.ts && prettier --write ./tests/*.test.ts",
+    "lint": "tslint --project tsconfig.json",
+    "qc": "npm run format && npm run lint && npm test",
+    "build-dev": "webpack",
+    "build": "npm run qc && webpack",
+    "test": "jest --config=jest.config.js --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timigen/chat-client.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/timigen/chat-client/issues"
+  },
+  "homepage": "https://github.com/timigen/chat-client#readme",
+  "devDependencies": {
+    "@types/jest": "^24.0.24",
+    "@types/node": "^12.12.21",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "ts-jest": "^24.2.0",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.3",
+    "chat-models": "timigen/chat-models#master",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.1",
+    "css-loader": "^0.28.11",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "ts-loader": "^4.4.1"
+  }
+}

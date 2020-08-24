@@ -1,0 +1,67 @@
+* {
+  padding:0px;
+  margin:0px;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: grey;
+}
+
+::-webkit-scrollbar-thumb {
+  background: green;
+}
+
+html, body { 
+  background-color: black; 
+  color: white;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  overflow: hidden;
+}
+
+#content { 
+  position: absolute;
+  padding:5px;
+  background:black;
+  overflow-x: hidden;
+  overflow-y: auto; 
+  border: 1px solid gray;
+  font-family: 'Space Mono', monospace; 
+}
+
+#controls {
+  border:1px solid gray;
+  position: absolute;
+}
+
+#input { 
+  border:1px solid #ccc;
+  padding:5px;
+  font-family: 'Space Mono', monospace;
+  /*position: absolute;*/
+}
+
+#status { 
+  position: absolute;
+  left: 0;
+  right: 0;
+  font-family: 'Space Mono', monospace;
+  padding: 3px;
+}
