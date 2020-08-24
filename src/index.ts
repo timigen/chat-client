@@ -1,3 +1,5 @@
+import "./style/style.scss";
+
 import { EventTypes, Message } from "chat-models";
 
 (() => {
@@ -133,7 +135,7 @@ import { EventTypes, Message } from "chat-models";
   function addMessage(message: Message) {
     content.innerHTML =
       content.innerHTML +
-      `<p><span>${message.author}</span>:<span>${message.text}</span></p>`;
+      `<p class='message' style='color: ${message.color};'><span>${message.author}</span>:<span>${message.text}</span></p>`;
 
     scrollToBottom("content");
   }
