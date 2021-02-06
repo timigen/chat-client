@@ -2,7 +2,7 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var entry = {
-    'chat-client': './src/index.ts'
+    'chat-client': './src/ts/index.ts'
 }
 
 module.exports = {

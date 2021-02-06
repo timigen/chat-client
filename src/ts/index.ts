@@ -1,13 +1,19 @@
-import "./style/style.scss";
+import "../style/style.scss";
 
 import { EventTypes, Message } from "chat-models";
 
 (() => {
   "use strict";
 
-  let name = "timigen"; // prompt("screen name", "joe-blow");
+  const storage = window.localStorage;
+  const sessionId = storage.getItem("chat-session-id");
 
-  const wsIp = "192.168.1.7";
+  console.log(`sessionId ${sessionId}`);
+
+  let name = prompt("screen name", "joe-blow");
+
+  let clientId: string;
+  const wsIp = "192.168.1.5";
   const wsPort = 1337;
   const wsAddress = `${wsIp}:${wsPort}`;
 
@@ -57,11 +63,12 @@ import { EventTypes, Message } from "chat-models";
   }
 
   // open connection
-  let connection = new WebSocket("ws://" + wsAddress);
-  connection.onopen = () => {
+  let connection = new WebSocket(`ws://${wsAddress}`);
+  connection.onopen = event => {
+    console.log(`event`, event);
     status.style.backgroundColor = "green";
     // status.style.padding = "5px";
-    status.innerText = "connected to " + wsAddress;
+    status.innerText = `connected as ${name} to ${wsAddress}`;
 
     input.disabled = false;
     input.value = "";
@@ -85,12 +92,16 @@ import { EventTypes, Message } from "chat-models";
       return;
     }
 
+    console.log("JSON: ", json);
+
     if (json.type === EventTypes.Join) {
       // entire message history
       // WRITE every message to the chat window
+      clientId = json.clientId;
       for (let i = 0; i < json.room.events.length; i++) {
         let target = json.room.events[i];
         // target.rendered = new Date().toISOString();
+        console.log("target");
         addMessage(target.data);
       }
     } else if (json.type === EventTypes.Message) {
@@ -108,15 +119,17 @@ import { EventTypes, Message } from "chat-models";
    * Send message when user presses Enter key
    */
   input.addEventListener("keydown", e => {
-    if (e.keyCode === 13) {
+    if (e.key === "Enter") {
       let msg = input.value;
       if (!msg) {
         return;
       }
 
-      const message = {
-        author: name,
-        color: "blue",
+      const message: Message = {
+        clientId,
+        color: null,
+        created: new Date().toISOString(),
+        name,
         text: msg
       };
       // send the message as an ordinary text
@@ -133,12 +146,15 @@ import { EventTypes, Message } from "chat-models";
    * Add message to the chat window
    */
   function addMessage(message: Message) {
-    content.innerHTML =
-      content.innerHTML +
-      `<div class='message' style='color: ${message.color};'>
-      <div class='author'>${message.author}</div><span>${message.text}</span></div>`;
+    if (message) {
+      content.innerHTML =
+        content.innerHTML +
+        `<div class='message' style='color: ${message.color};'>
+          <div class='author'>${message.name}&nbsp;|&nbsp;${message.created}</div>
+          <span>${message.text}</span></div>`;
 
-    scrollToBottom("content");
+      scrollToBottom("content");
+    }
   }
 
   function scrollToBottom(id: string) {
